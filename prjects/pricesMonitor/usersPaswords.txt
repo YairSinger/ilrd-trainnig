@@ -1,2 +1,0 @@
-kafka, "Gandi2005"
-postgreSql, "grocerySqlUsr", "Gandi2005"
