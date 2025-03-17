@@ -1,0 +1,10 @@
+94433570115604	global variable [bss/data]
+139969226083184 process heap 
+139969293192048 process heap
+139969427409776 process heap
+139969517571644	thread 3 local var
+139969517571664 stack thread 3
+139969525964348 thread 2 local var
+139969525964368	stack thread 2
+139969534357052	main thread local var
+139969534357072 stack main thread

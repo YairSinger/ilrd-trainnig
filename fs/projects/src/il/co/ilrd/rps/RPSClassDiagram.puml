@@ -1,0 +1,192 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+folder RPS{
+
+folder PlugAndPlayModule{
+class PlugAndPlay {
++PlugAndPlay(String ,
+GenericFactory<String, ICommand, String>)
+}
+
+class JarLoader {
++DynamicJarLoader(String)
++load(String): Class<?>[]
+}
+
+interface CmdCreator {
+ createCommand(String):ICommand
+   getKey():String
+}
+
+class DirMonitor {
+ +DirMonitor(String ,WatchEvent.Kind<?>[])
+ +subscribe(Callback<WatchEvent<T>>): void
+ +unsubscribe(Callback<WatchEvent<T>> ):void
+ +startMonitor():void
+ +stopMonitor():void
+}
+folder defaultJarDir{
+ class CmdCreatorImp
+ class Cmd
+}
+class Callback<T>{
++Callback(Function<T, Void>, Function<Void, Void>)
+    +update(T msg):void
+    +stopUpdate():void
+    +unsubscribe():void
+    +stopService():void
+}
+
+class Dispatcher<T>{
++subscribe(Callback<T>):void
++unsubscribe(Callback<T>):void
++updateAll(T):void
++stopService():void
+}
+
+folder plugAndPlayJarDir{
+  class CmdCreatorImpUser
+  class CmdImpUser
+ }
+
+ class CommandClassLoader{
+     +subscribe(DirMonitor<T>):void
+ }
+
+}
+
+
+folder GenericFactoryModule {
+interface ICommand{
+    execute():void
+}
+class GenericFactory<K,T,D>{
+registerCreator(K, Function<D, ? extends T>):void
+createObject(K key, D creatorParam):T
+}
+
+}
+folder ParserModule{
+interface RequestParser{
+ parse(String request):Pair<String,String>
+}
+
+class Parser
+}
+
+interface Executor{
+ execute():void
+
+
+}
+
+
+
+
+interface Comparable
+
+
+
+interface Runnable{
+run():void
+}
+
+interface Future<T>{
+cancel(boolean):boolean
+isCancelled():boolean
+isDone():void
+get():T
+get(long,TimeUnit):T
+}
+
+class Thread
+
+
+folder ThreadPoolModule{
+class Worker
+class WaitablePQ<E>{
+WaitablePQSem(Comparator<? super E>)
+size():int
+isEmpty():boolean
+enqueue(E element):void
+dequeue():E
+dequeue(long,TimeUnit):E
+remove(E):boolean
+}
+
+class ThreadPool{
+    ThreadPool(int)
+    3 X submit(task,priority,value):Future<T>
+    setNumOfThreads(int):void
+    pause():void
+    resume():void
+    shutdown():void
+    awaitTermination(long,TimeUnit):void
+}
+
+class Task<T>{
+Task(int, Callable<V>)
+}
+class TaskFuture<T>
+}
+
+
+
+
+
+
+
+ }
+
+PlugAndPlay o-d- DirMonitor
+PlugAndPlay *-r- CommandClassLoader
+
+CommandClassLoader o-- JarLoader
+
+CommandClassLoader -[hidden]- DirMonitor
+CommandClassLoader o-- Callback
+DirMonitor o-- Dispatcher
+Callback -[hidden]u- DirMonitor
+GenericFactoryModule -[hidden]d- PlugAndPlayModule
+GenericFactory -r- ICommand
+
+CmdCreator <|-u-CmdCreatorImp
+CmdCreator <|-d-CmdCreatorImpUser
+CmdCreatorImp -[hidden]r- CmdCreatorImpUser
+
+
+CommandClassLoader -- CmdCreator
+
+Executor <|-d- ThreadPool
+ThreadPool *-l- WaitablePQ
+WaitablePQ o-u-"n" Task
+
+Task *-u- Future
+Future -[hidden]l- Comparable
+Executor -[hidden]l- Thread
+Future <|-u- TaskFuture
+Task -u-|> Runnable
+Task -u-|> Comparable
+
+Worker -u-|> Thread
+Worker -- WaitablePQ
+Worker -- ThreadPool
+
+Parser -u-|> RequestParser
+
+ThreadPoolModule -[hidden]d- ParserModule
+ThreadPoolModule -[hidden]l- PlugAndPlayModule
+ParserModule -[hidden]l- PlugAndPlayModule
+GenericFactoryModule -[hidden]d- PlugAndPlayModule
+
+
+
+
+
+
+
+
+
+
+@enduml

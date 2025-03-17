@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "local launch (cppdbg)",
+            "request": "launch",
+            "program": "/home/shahar/infinity/git/ds/heap/bin/debug/heap_test",
+            "cwd": "${workspaceFolder}",
+            "type": "cppdbg",
+            "args": [],
+            "environment": [],
+            "setupCommands": [
+                { "text": "set disassembly-flavor intel", "description": "", "ignoreFailures": false },
+                { "text": "-enable-pretty-printing", "description": "", "ignoreFailures": false }
+            ],
+            "stopAtEntry": true,
+            "MIDebuggerPath": "gdb",
+            "MIMode": "gdb"
+        }
+    ]
+}

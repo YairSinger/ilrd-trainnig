@@ -1,0 +1,70 @@
+@startuml
+'https://plantuml.com/component-diagram
+
+
+
+    folder "GateWay"{
+       folder "CommunicationService"{
+       collections supported_protocol
+       }
+       folder "Thread Pool"{
+           folder "waitablePQ"{
+
+           }
+           }
+       folder RequestPaser
+       folder FactoryCmd
+       folder cmd
+        }
+
+    node requests_queue
+
+
+
+
+
+actor Company_user
+entity Company
+collections IOTs
+
+
+cloud "website" {
+
+  folder "Companies" {
+     folder "registerCompany()" {
+      }
+      folder "registerProducts()" {
+            }
+    }
+   folder "users" {
+    [registerIOT()]
+    }
+}
+
+folder "Plag & play"{
+collections added_functionality
+}
+database "Administrative DB" {
+  folder "Companies data" {
+    }
+}
+
+database "company DB" {
+collections companies_IOT_DB
+}
+cloud clients_servers
+
+Company --> "Companies"
+Company_user --> "users"
+"registerCompany()" --> "Administrative DB"
+"registerProducts()" -->"company DB"
+[registerIOT()] -->"company DB"
+IOTs --> gateway
+gateway --> requests_queue
+ requests_queue -.> "Tread Pool"
+ requests_queue -.> "Tread Pool"
+"Tread Pool" <--> "company DB"
+"Plag & play" -->"company DB"
+"company DB" --> clients_servers
+clients_servers -->IOTs
+@enduml

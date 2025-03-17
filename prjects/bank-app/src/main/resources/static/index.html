@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Bank</title>
+    <style>
+        .error { color: red; display: none; }
+        .success { color: green; display: none; }
+        .form-group { margin-bottom: 10px; }
+        .account-section { display: none; }
+        .welcome-message { font-weight: bold; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h2>Simple Bank</h2>
+    
+    <!-- Login/Register Section -->
+    <div id="authSection">
+        <!-- Registration Form -->
+        <h3>Register</h3>
+        <div class="form-group">
+            <input type="text" id="name" placeholder="Name" pattern="[A-Za-z\s]+" maxlength="50" required />
+            <div id="nameError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <input type="email" id="email" placeholder="Email" maxlength="100" required />
+            <div id="emailError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <input type="tel" id="phone" placeholder="Phone (e.g., +1234567890)" 
+                   pattern="\+?[1-9][0-9]{7,14}" required />
+            <div id="phoneError" class="error"></div>
+        </div>
+        <button onclick="register()">Register</button>
+        <div id="registerSuccess" class="success">Registration successful!</div>
+
+        <!-- Login Form -->
+        <h3>Login</h3>
+        <div class="form-group">
+            <input type="email" id="loginEmail" placeholder="Email" required />
+            <div id="loginError" class="error"></div>
+        </div>
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- Account Section (visible after login) -->
+    <div id="accountSection" class="account-section">
+        <div class="welcome-message">Welcome, <span id="userName"></span>!</div>
+        <button onclick="logout()" style="float: right;">Logout</button>
+        
+        <h3>Account Details</h3>
+        <p><strong>Balance:</strong> $<span id="balance">0.00</span></p>
+        
+        <!-- Transfer Funds -->
+        <h3>Transfer Money</h3>
+        <div class="form-group">
+            <select id="toEmail" required>
+                <option value="">Select recipient</option>
+            </select>
+            <div id="transferEmailError" class="error"></div>
+        </div>
+        <div class="form-group">
+            <input type="number" id="amount" placeholder="Amount" min="0.01" step="0.01" required />
+            <div id="transferAmountError" class="error"></div>
+        </div>
+        <button onclick="transfer()">Transfer</button>
+        <div id="transferSuccess" class="success">Transfer successful!</div>
+        <div id="transferError" class="error"></div>
+    </div>
+
+    <script>
+        let accessToken = null;
+        let refreshToken = null;
+
+        let loggedInUser;
+        let allUsers = [];
+
+        function clearErrors() {
+            document.querySelectorAll('.error').forEach(err => err.style.display = 'none');
+            document.querySelectorAll('.success').forEach(success => success.style.display = 'none');
+        }
+
+        // Update the showError and showSuccess functions:
+function showError(elementId, message) {
+    const errorElement = document.getElementById(elementId);
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+        console.log('Showing error:', elementId, message);  // Debug log
+    } else {
+        console.error('Error element not found:', elementId);  // Debug log
+    }
+}
+
+function showSuccess(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.style.display = 'block';
+        console.log('Showing success:', elementId);  // Debug log
+        setTimeout(() => {
+            element.style.display = 'none';
+        }, 3000);
+    } else {
+        console.error('Success element not found:', elementId);  // Debug log
+    }
+}
+        function clearInputs(inputs) {
+            inputs.forEach(id => {
+                document.getElementById(id).value = '';
+            });
+        }
+
+        function validateEmail(email) {
+            const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,63}$/;
+            return re.test(email);
+        }
+
+        function validatePhone(phone) {
+            const re = /^\+?[1-9][0-9]{7,14}$/;
+            return re.test(phone);
+        }
+
+        function validateName(name) {
+            const re = /^[a-zA-Z\s]{2,50}$/;
+            return re.test(name);
+        }
+
+    async function register() {
+    clearErrors();
+    
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    
+    console.log('Attempting registration with:', { name, email, phone });  // Debug log
+    // Validate inputs
+    let hasError = false;
+    
+    if (!validateName(name)) {
+        showError('nameError', 'Name must be 2-50 characters and contain only letters and spaces');
+        hasError = true;
+    }
+    
+    if (!validateEmail(email)) {
+        showError('emailError', 'Invalid email format');
+        hasError = true;
+    }
+    
+    if (!validatePhone(phone)) {
+        showError('phoneError', 'Phone must be 8-15 digits and may start with +');
+        hasError = true;
+    }
+    if (hasError) return;
+
+    try {
+        const response = await fetch('/api/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, phone })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            Object.keys(errorData).forEach(key => {
+                showError(`${key}Error`, errorData[key]);
+            });
+            return;
+        }
+
+        const data = await response.json();
+        // Store tokens
+        accessToken = data.accessToken;
+        refreshToken = data.refreshToken;
+        loggedInUser = {
+            email: data.email,
+            name: name,
+            balance: data.balance
+        };
+        
+        showSuccess('registerSuccess');
+        clearInputs(['name', 'email', 'phone']);
+        showAccountSection(true);
+    } catch (error) {
+        showError('nameError', 'Registration failed. Please try again.');
+    }
+}
+
+async function login() {
+    clearErrors();
+    const email = document.getElementById('loginEmail').value.trim();
+    
+    if (!validateEmail(email)) {
+        showError('loginError', 'Invalid email format');
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/users/login?email=${encodeURIComponent(email)}`, {
+            method: 'POST'
+        });
+
+        if (!response.ok) {
+            showError('loginError', 'Login failed. Please check your email.');
+            return;
+        }
+
+        const data = await response.json();
+        accessToken = data.accessToken;
+        refreshToken = data.refreshToken;
+        loggedInUser = {
+            email: data.email,
+            balance: data.balance
+        };
+        
+        clearInputs(['loginEmail']);
+        showAccountSection(true);
+    } catch (error) {
+        showError('loginError', 'Login failed. Please try again.');
+    }
+} 
+
+async function refreshAccessToken() {
+    try {
+        const response = await fetch('/api/users/refresh', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken })
+        });
+
+        if (!response.ok) {
+            // If refresh fails, log out the user
+            logout();
+            return false;
+        }
+
+        const data = await response.json();
+        accessToken = data.accessToken;
+        return true;
+    } catch (error) {
+        logout();
+        return false;
+    }
+}
+
+async function getAllUsers() {
+    try {
+        console.log('Fetching all users with token:', accessToken);  // Debug log
+        const response = await fetch('/api/users/all', {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+        
+        console.log('getAllUsers response status:', response.status);  // Debug log
+        
+        if (response.status === 401) {
+            console.log('Token expired, attempting refresh...');  // Debug log
+            if (await refreshAccessToken()) {
+                return getAllUsers(); // Retry with new token
+            }
+            return;
+        }
+        
+        if (response.ok) {
+            allUsers = await response.json();
+            console.log('Retrieved users:', allUsers);  // Debug log
+            updateRecipientsList();
+        } else {
+            console.error('Failed to fetch users:', response.status);
+        }
+    } catch (error) {
+        console.error('Failed to fetch users:', error);
+    }
+}
+
+
+        function updateRecipientsList() {
+            const select = document.getElementById('toEmail');
+            select.innerHTML = '<option value="">Select recipient</option>';
+            
+            allUsers.forEach(user => {
+                if (loggedInUser && user.email !== loggedInUser.email) {
+                    const option = document.createElement('option');
+                    option.value = user.email;
+                    option.textContent = `${user.name} (${user.email})`;
+                    select.appendChild(option);
+                }
+            });
+        }
+
+        function showAccountSection(show) {
+    console.log('Showing account section:', show, 'User:', loggedInUser);  // Debug log
+    document.getElementById('authSection').style.display = show ? 'none' : 'block';
+    document.getElementById('accountSection').style.display = show ? 'block' : 'none';
+    if (show) {
+        document.getElementById('userName').textContent = loggedInUser.name;
+        updateBalance();
+        getAllUsers(); // Fetch users for the dropdown
+    }
+}
+
+
+        function logout() {
+    accessToken = null;
+    refreshToken = null;
+    loggedInUser = null;
+    showAccountSection(false);
+    clearInputs(['loginEmail']);
+}
+
+      
+        function clearErrors() {
+            document.querySelectorAll('.error').forEach(err => err.style.display = 'none');
+            document.querySelectorAll('.success').forEach(success => success.style.display = 'none');
+        }
+
+       
+
+        async function login() {
+            clearErrors();
+            const email = document.getElementById('loginEmail').value.trim();
+            
+            if (!validateEmail(email)) {
+                showError('loginError', 'Invalid email format');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/users/login?email=${encodeURIComponent(email)}`, {
+                    method: 'POST'
+                });
+
+                if (!response.ok) {
+                    showError('loginError', 'Login failed. Please check your email.');
+                    return;
+                }
+
+                loggedInUser = await response.json();
+                clearInputs(['loginEmail']);
+                showAccountSection(true);
+            } catch (error) {
+                showError('loginError', 'Login failed. Please try again.');
+            }
+        }
+
+    async function transfer() {
+        clearErrors();
+        const toEmail = document.getElementById('toEmail').value;
+        const amount = document.getElementById('amount').value;
+        
+        console.log('Transfer attempt:', { toEmail, amount, token: accessToken }); // Debug log
+
+        if (!toEmail || amount <= 0) {
+
+            showError('transferEmailError', 'Please select a recipient');
+            // Validation remains the same...
+            return;
+        }
+
+        if (amount <= 0) {
+            showError('transferAmountError', 'Amount must be greater than 0');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/users/transfer?fromEmail=${encodeURIComponent(loggedInUser.email)}&toEmail=${encodeURIComponent(toEmail)}&amount=${amount}`, {
+                method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            }
+            });
+
+            console.log('Transfer response:', response.status); // Debug log
+
+            if (response.status === 401 || response.status === 403) {
+            // Token might be expired, try to refresh
+            console.log('Attempting token refresh...'); // Debug log
+            if (await refreshAccessToken()) {
+                return transfer(); // Retry with new token
+            }
+            showError('transferError', 'Authentication failed. Please login again.');
+            return;
+        }
+
+            if (!response.ok) {
+                const errorData = await response.text();
+            console.error('Transfer failed:', errorData); // Debug log
+            showError('transferError', `Transfer failed: ${errorData}`);
+                return;
+            }
+
+            const newBalance = await response.json();
+            loggedInUser.balance = newBalance;
+            updateBalance();
+            showSuccess('transferSuccess');
+            clearInputs(['amount']);
+            document.getElementById('toEmail').value = '';
+        } catch (error) {
+            showError('transferError', 'Transfer failed. Please try again.');
+        }
+        }
+        
+        function updateBalance() {
+            if (loggedInUser) {
+                document.getElementById('balance').innerText = loggedInUser.balance.toFixed(2);
+            }
+        }
+    </script>
+</body>
+</html>

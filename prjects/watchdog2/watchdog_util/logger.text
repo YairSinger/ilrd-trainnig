@@ -1,0 +1,173 @@
+[34m197615 - started[0m[34m198943 - started by 181184
+[0m[34m198943 user process is forking
+[0m[34m198943 user process is forking
+[0m[34mpid 198943  start WDStop
+[0m[34mpid 198943  user scheduler stoped
+[0m[34mpid 198943  watchdog thread pthread_join returned 0 
+[0m[34m200523 - WDStart started by 181184
+[0m[34m200523 user process is forking
+[0m[34mpid 200523  user process sigactions is set
+[0m[34m200523 user process is forking
+[0m[34mpid 200523 user process Watchdog thread started 
+[0m								[35mpid 200532  watchdog process started
+[0m								[35mpid 200532 watchdog process sigaction is set
+[0m								[35mpid 200532 watchdog process Schedrun starts
+[0m[34mpid 200523  start WDStop
+[0m								[35mpid 200532  watchdog process SchedulerRun returned 1
+[0m								[35mpid 200532  watchdog process scheduler destroyed 0
+[0m[34mpid 200523 user process Watchdog scheduler run returned 1
+[0m[34mpid 200523 user  Watchdog scheduler destroyed
+[0m[34mpid 200523  user scheduler stoped
+[0m[34mpid 200523  watchdog thread pthread_join returned 0 
+[0m[34m202088 - WDStart started by 181184
+[0m[34m202088 user process is forking
+[0m[34mpid 202088  user process sigactions is set
+[0m[34m202088 user process is forking
+[0m[34mpid 202088 user process Watchdog thread started 
+[0m[34mpid 202088  forked 202096
+[0m								[35mpid 202096  watchdog process started
+[0m								[35mpid 202096 watchdog process sigaction is set
+[0m								[35mpid 202096 watchdog process Schedrun starts
+[0m[34mpid 202088  start WDStop
+[0m								[35m pid 202096  stop flag has changed to 1
+[0m[34m pid 202088  stop flag has changed to 1
+[0m								[35mpid 202096  watchdog process SchedulerRun returned 1
+[0m[34mpid 202088 user process Watchdog scheduler run returned 1
+[0m[34mpid 202088 user  Watchdog scheduler destroyed
+[0m								[35mpid 202096  watchdog process scheduler destroyed 0
+[0m[34mpid 202088  user scheduler stoped
+[0m[34mpid 202088  watchdog thread pthread_join returned 0 
+[0m[34m52478 - WDStart started by 51574
+[0m[34m52478 user process is forking
+[0m[34mpid 52478  user process sigactions is set
+[0m[34m52478 user process is forking
+[0m[34mpid 52478 user process Watchdog thread started 
+[0m								[35mpid 52479  watchdog process started
+[0m								[35mpid 52479 watchdog process sigaction is set
+[0m								[35mpid 52479 watchdog process Schedrun starts
+[0m[34mpid 52478  forked 52562
+[0m								[35mpid 52562  watchdog process started
+[0m								[35mpid 52562 watchdog process sigaction is set
+[0m								[35mpid 52562 watchdog process Schedrun starts
+[0m[34mpid 52478  start WDStop
+[0m								[35m pid 52562  stop flag has changed to 1
+[0m								[35mpid 52562  watchdog process SchedulerRun returned 1
+[0m								[35mpid 52562  watchdog process scheduler destroyed 0
+[0m[34m pid 52478  stop flag has changed to 1
+[0m[34mpid 52478 user process Watchdog scheduler run returned 1
+[0m[34mpid 52478 user  Watchdog scheduler destroyed
+[0m[34mpid 52478 SIGUSR2 timeout ended
+[0m[34mpid 52478  user scheduler stoped
+[0m[34mpid 52478  watchdog thread pthread_join returned 0 
+[0m[34m52661 - WDStart started by 51574
+[0m[34m52661 user process is forking
+[0m[34mpid 52661  user process sigactions is set
+[0m[34m52661 user process is forking
+[0m[34mpid 52661 user process Watchdog thread started 
+[0m[34mpid 52661  forked 52715
+[0m								[35mpid 52715  watchdog process started
+[0m								[35mpid 52715 watchdog process sigaction is set
+[0m								[35mpid 52715 watchdog process Schedrun starts
+[0m								[35mpid 52715  forked 52775
+[0m[34m52775 - WDStart started by 52715
+[0m[34mpid 52775  user process sigactions is set
+[0m[34m52775 user process is forking
+[0m[34mpid 52775 user process Watchdog thread started 
+[0m[34m221944 - WDStart started by 221176
+[0m[34m222816 - WDStart started by 222744
+[0m[34m223738 - WDStart started by 221176
+[0m[34m223738 user process is forking
+[0m[34mpid 223738  user process sigactions is set
+[0m[34m223738 user process is forking
+[0m[31m pid 223739  execv failed returned No such file or directory
+[0m[34mpid 223739  user process sigactions is set
+[0m[34m223738 user process is forking
+[0m[34mpid 223738 user process Watchdog thread started 
+[0m[34mpid 223739 user process Watchdog thread started 
+[0m[34mpid 223739  start WDStop
+[0m[34mpid 223739 SIGUSR2 timeout ended
+[0m[34mpid 223739  user scheduler stoped
+[0m[34m228966 - WDStart started by 226630
+[0m[34m228966 user process is forking
+[0m[34mpid 228966  user process sigactions is set
+[0m[34m228966 user process is forking
+[0m[34mpid 228966 user process Watchdog thread started 
+[0m								[35mpid 228968  watchdog process started
+[0m								[35mpid 228968 watchdog process sigaction is set
+[0m								[35mpid 228968 watchdog process Schedrun starts
+[0m[34mpid 228966  start WDStop
+[0m								[35m pid 228968  stop flag has changed to 1
+[0m								[35mpid 228968  watchdog process SchedulerRun returned 1
+[0m								[35mpid 228968  watchdog process scheduler destroyed 0
+[0m[34m pid 228966  stop flag has changed to 1
+[0m[34mpid 228966 user process Watchdog scheduler run returned 1
+[0m[34mpid 228966 user  Watchdog scheduler destroyed
+[0m[34mpid 228966 SIGUSR2 timeout ended
+[0m[34mpid 228966  user scheduler stoped
+[0m[34mpid 228966  watchdog thread pthread_join returned 0 
+[0m[34m228974 - WDStart started by 226630
+[0m[34m228974 user process is forking
+[0m[34mpid 228974  user process sigactions is set
+[0m[34m228974 user process is forking
+[0m[34mpid 228974 user process Watchdog thread started 
+[0m								[35mpid 228975  watchdog process started
+[0m								[35mpid 228975 watchdog process sigaction is set
+[0m								[35mpid 228975 watchdog process Schedrun starts
+[0m[34m239255 - WDStart started by 226630
+[0m[34m239255 user process is forking
+[0m[34mpid 239255  user process sigactions is set
+[0m[34m239255 user process is forking
+[0m[34mpid 239255 user process Watchdog thread started 
+[0m								[35mpid 239257  watchdog process started
+[0m								[35mpid 239257 watchdog process sigaction is set
+[0m								[35mpid 239257 watchdog process Schedrun starts
+[0m[34mpid 239255  start WDStop
+[0m								[35m pid 239257  stop flag has changed to 1
+[0m								[35mpid 239257  watchdog process SchedulerRun returned 1
+[0m								[35mpid 239257  watchdog process scheduler destroyed 0
+[0m[34m pid 239255  stop flag has changed to 1
+[0m[34mpid 239255 user process Watchdog scheduler run returned 1
+[0m[34mpid 239255 user  Watchdog scheduler destroyed
+[0m[34mpid 239255 SIGUSR2 timeout ended
+[0m[34mpid 239255  user scheduler stoped
+[0m[34mpid 239255  watchdog thread pthread_join returned 0 
+[0m[34m239277 - WDStart started by 226630
+[0m[34m239277 user process is forking
+[0m[34mpid 239277  user process sigactions is set
+[0m[34m239277 user process is forking
+[0m[34mpid 239277 user process Watchdog thread started 
+[0m								[35mpid 239279  watchdog process started
+[0m								[35mpid 239279 watchdog process sigaction is set
+[0m								[35mpid 239279 watchdog process Schedrun starts
+[0m								[35mpid 239279  forked 239285
+[0m								[31m pid 239285  execv failed returned No such file or directory
+[0m								[35mpid 239279  forked 239277
+[0m[34m239314 - WDStart started by 226630
+[0m[34m239314 user process is forking
+[0m[34mpid 239314  user process sigactions is set
+[0m[34m239314 user process is forking
+[0m[34mpid 239314 user process Watchdog thread started 
+[0m[34m239321 - WDStart started by 226630
+[0m[34m239321 user process is forking
+[0m[34mpid 239321  user process sigactions is set
+[0m[34m239321 user process is forking
+[0m[34mpid 239321 user process Watchdog thread started 
+[0m								[35mpid 239323  watchdog process started
+[0m								[35mpid 239323 watchdog process sigaction is set
+[0m								[35mpid 239323 watchdog process Schedrun starts
+[0m[34mpid 239321  start WDStop
+[0m[34m pid 239321  stop flag has changed to 1
+[0m[34mpid 239321 user process Watchdog scheduler run returned 1
+[0m[34mpid 239321 user  Watchdog scheduler destroyed
+[0m[34mpid 239321 SIGUSR2 timeout ended
+[0m[34mpid 239321  user scheduler stoped
+[0m[34mpid 239321  watchdog thread pthread_join returned 0 
+[0m[34m239348 - WDStart started by 226630
+[0m[34m239348 user process is forking
+[0m[34mpid 239348  user process sigactions is set
+[0m[34m239348 user process is forking
+[0m[34mpid 239348 user process Watchdog thread started 
+[0m								[35mpid 239349  watchdog process started
+[0m								[35mpid 239349 watchdog process sigaction is set
+[0m								[35mpid 239349 watchdog process Schedrun starts
+[0m

@@ -1,0 +1,11 @@
+[project-build]
+command=make
+save=2
+
+[project-clean]
+command=make clean
+
+[project-run]
+command=vlg ./bin/debug/heap_test
+
+output=terminal

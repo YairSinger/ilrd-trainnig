@@ -1,0 +1,33 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+
+interface FileComponent{
+display():void
+}
+
+
+
+FileTree <|- FolderComposite
+FileTree <|- FileLeaf
+FileComponent <|-. FolderComposite
+FileComponent <|-. FileLeaf
+
+
+
+
+class FileTree {
+ +FileTree(String)
+ +display():void
+}
+
+-class FolderComposite {
+ +FolderComposite(File)
+}
+
+-class FileLeaf {
+ +FileLeaf(File)
+}
+
+
+@enduml

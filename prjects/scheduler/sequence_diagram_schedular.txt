@@ -1,0 +1,344 @@
+
+participant user
+
+participant sqedualer
+participant task
+participant pqueue
+
+participant uid
+
+
+
+
+
+//create
+group #lightblue create
+
+user->sqedualer:SchedulerCreate()
+activate sqedualer
+note left of sqedualer:create sqeduler struct and 
+group #red sqedualer malloc faild
+
+
+sqedualer--#red>user: NUll
+
+
+
+
+
+end
+sqedualer->pqueue: PQCreate(priority_func)
+activate pqueue
+
+group #red pqcreate faild
+pqueue--#red>sqedualer: NUll
+note left of sqedualer:free sqeduler struct
+sqedualer--#red>user: NUll
+end
+
+pqueue--#green>sqedualer: pqueue_t * queue
+deactivate pqueue
+
+sqedualer--#green>user: scheduler_t *
+deactivate sqedualer
+
+end 
+
+parallel 
+box over user:user
+box over sqedualer:sqedualer
+box over pqueue:pqueue
+box over task:task
+box over uid:uid
+parallel off
+
+
+//destroy
+group #lightblue Destroy
+user->sqedualer:SchedulerDestroy(scheduler_t *scheduler)
+
+sqedualer->sqedualer:void SchedulerClear(scheduler_t *scheduler);
+
+sqedualer->pqueue:PQDestroy(pqueue_t *queue)
+
+
+activate sqedualer
+
+
+note left of sqedualer:destroy sqeduler struct
+deactivate sqedualer
+end 
+
+parallel 
+box over user:user
+box over sqedualer:sqedualer
+box over pqueue:pqueue
+box over task:task
+box over uid:uid
+parallel off
+
+
+
+group #lightblue AddTask
+user->sqedualer:SchedulerAddTask(scheduler_t , *op_func, *params, time_to_execute)
+activate sqedualer
+sqedualer->uid:GenerateBadUID()
+uid-->sqedualer :uid_t bad
+note over sqedualer:save bad uid
+sqedualer->task:TaskCreate(*op_func, *params, time_to_execute.freqency)
+deactivate sqedualer
+activate task
+
+ 
+note over task:malloc task
+
+group #red task malloc failed new_task = null
+activate sqedualer
+task --#red>sqedualer:NUll
+deactivate task
+note over sqedualer:test if null
+
+
+
+sqedualer --#red>user:uid_t bad
+deactivate sqedualer
+end
+activate task
+task->uid:uid_t GenerateUID()
+uid--#red>task:uid_t bad
+uid--#green>task:uid_t
+task->uid:uid_t uid_t GenerateBadUID()
+uid-->task:uid_t bad
+task->uid:uid_t uid_t IsSameUID(uid_t, bad)
+group #red GenerateUID failed
+uid --#red>task:int 1
+
+task->task:TaskDestroy(task_t*)
+task --#red>sqedualer:Null
+
+activate sqedualer
+
+sqedualer --#red>user:uid_t bad
+deactivate sqedualer
+end
+
+
+
+
+
+
+
+activate pqueue
+group #red PQEnqueue faild
+activate sqedualer
+pqueue--#red>sqedualer:int 1
+deactivate pqueue
+sqedualer->task:TaskDestroy(uid_t uid)
+sqedualer --#red>user:uid_t bad
+end
+uid --#green>task:int 0
+task--#green>sqedualer:task*
+deactivate task
+sqedualer->pqueue:int PQEnqueue(pqueue_t *queue, const void *data)
+pqueue--#green>sqedualer:int 0
+sqedualer->task:uid_t TaskGetUid(task_t *)
+task-->sqedualer:uid_t 
+sqedualer --#green>user:uid_t
+deactivate sqedualer
+
+
+activate task
+
+deactivate task
+
+
+end 
+
+parallel 
+box over user:user
+box over sqedualer:sqedualer
+box over pqueue:pqueue
+box over task:task
+box over uid:uid
+parallel off
+
+
+//remove task
+group #lightblue remove task
+user->sqedualer:void SchedulerRemoveTask(scheduler_t *scheduler, uid_t task_uid)
+activate pqueue
+sqedualer->pqueue: void *PQErase(pqueue_t *queue, int (*is_task_match)(const void *lhs, const void *rhs), void *rhs);
+note left of pqueue:activate TaskIsUidSame
+deactivate pqueue
+activate task
+task->task:uid_t TaskGetUid(task_t *)
+task->uid:int IsSameUID(uid_t uid1, uid_t uid2)
+uid-->task:int 0 / 1
+task--#green>pqueue:result of TaskIsSameUid int 0 / 1
+deactivate task
+activate pqueue
+
+pqueue-->sqedualer: (void *) task_t*
+deactivate pqueue
+
+sqedualer->task:void TaskDestroy(task_t*)
+end 
+
+parallel 
+box over user:user
+box over sqedualer:sqedualer
+box over pqueue:pqueue
+box over task:task
+box over uid:uid
+parallel off
+
+
+//Size
+group #lightblue size
+user->sqedualer:size_t SchedulerSize(const scheduler_t *scheduler)
+sqedualer->pqueue:size_t PQSize(const pqueue_t *queue);
+pqueue-->sqedualer:size_t
+sqedualer-->user:size_t
+end
+
+parallel 
+box over user:user
+box over sqedualer:sqedualer
+box over pqueue:pqueue
+box over task:task
+box over uid:uid
+parallel off
+
+
+//IsEmpty
+group #lightblue IsEmpty
+user->sqedualer:int SchedulerIsEmpty(const scheduler_t *scheduler);
+sqedualer->pqueue:size_t int PQIsEmpty(const pqueue_t *queue)
+pqueue-->sqedualer: int True / False
+sqedualer-->user:int True / False
+end
+
+
+parallel 
+box over user:user
+box over sqedualer:sqedualer
+box over pqueue:pqueue
+box over task:task
+box over uid:uid
+parallel off
+
+
+//clear
+group #lightblue clear
+user->sqedualer:void SchedulerClear(scheduler_t *scheduler);
+activate sqedualer
+loop while !PQIsEmpty
+sqedualer->pqueue :void *PQPeek(pqueue_t *queue);
+pqueue-->sqedualer:(void *) task*
+sqedualer->task:TaskDestroy(task_t *task)
+sqedualer->pqueue:void PQDequeue(pqueue_t *queue)
+
+end
+deactivate sqedualer
+end
+
+parallel 
+
+box over user:user
+box over sqedualer:sqedualer
+box over pqueue:pqueue
+box over task:task
+box over uid:uid
+parallel off
+
+
+//run
+group #lightblue run
+user->sqedualer:int SchedulerRun(scheduler_t *scheduler)
+activate sqedualer
+note over sqedualer:store run_start_time
+loop #gray while sqedualer not empty AND op_func didnt fail AND stop_flag = 0
+
+
+sqedualer->pqueue:void *PQPeek(pqueue_t *queue);
+
+activate pqueue
+
+pqueue-->sqedualer: (void *) task_t*
+deactivate pqueue
+activate task
+sqedualer ->task: size_t TaskGetTimeToExceute(task_t *)
+task -->sqedualer: size_t time_to_execule
+deactivate task
+note over sqedualer:waits until (schedual runtime (now() - run_stat_time)) - time to exe > 0 
+
+
+sqedualer->task:int TaskRun(task_t *)
+
+
+activate task
+loop if status != 1
+
+sqedualer->task:TaskDestroy(task_t *task)
+end
+sqedualer->pqueue:void PQDequeue(pqueue_t *queue)
+break #red if op_function failed
+
+task--#red>sqedualer:int !0 && !1
+deactivate task
+
+sqedualer->sqedualer:SchedulerStop
+end
+
+opt #lightyellow repeating task just ended
+task--#green>sqedualer:int 1
+sqedualer->task:task_t *TaskUpdateRepeatingTask(task_t *)
+task--#green>sqedualer:task_t* updated task
+loop #pink for 3 trys while PQEnqueue fail
+
+sqedualer->pqueue:int PQEnqueue(pqueue_t *queue, const void *data)
+deactivate sqedualer
+activate pqueue
+
+pqueue--#red>sqedualer:int 1
+pqueue--#green>sqedualer:int 0
+deactivate pqueue
+activate sqedualer
+note over sqedualer:failed to RE-enqueue task
+sqedualer->task:TaskDestroy(task_t *task)
+sqedualer--#red>user:int 1
+deactivate sqedualer
+
+end
+
+end 
+
+end 
+parallel 
+note right of sqedualer:failed status after stop
+sqedualer--#red>user:int !0 && ! 1
+parallel off
+sqedualer--#green>user:int 0
+
+end
+
+parallel 
+
+box over user:user
+box over sqedualer:sqedualer
+box over pqueue:pqueue
+box over task:task
+box over uid:uid
+parallel off
+
+
+//stop
+group #lightblue stop
+note over task:TaskRun activated SchedulerStop
+task ->sqedualer:void SchedulerStop(scheduler_t *scheduler)
+
+note over sqedualer:turn on the  stop flag in SchedulerRun
+
+
+end 
+

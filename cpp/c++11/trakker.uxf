@@ -1,0 +1,41 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><element><id>UMLClass</id><coordinates><x>1100</x><y>80</y><w>210</w><h>420</h></coordinates><panel_attributes>&lt;&lt;IEngine&gt;&gt;
+
+--
+Enum EngineMode{
+EROR,
+IDLE,
+MOVE
+}
+
+Enum EngineLimitation{
+MAX_SPEED,
+MAX_ACCELRATION
+}
+--
+
+#Operation(i: int): int
+/+startMove(): int/
+/+stopMove() : int/
+/+get/setSpeed(float magnitude)
+ : int/ 
+/+get/setDitrection(bool direction)
+:void/
+/+EngineMode getMode()/
+/+getLimits()/
+
+--
+Responsibilities
+activate a single engine by its 
+limitations on a single axis </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>680</x><y>110</y><w>210</w><h>190</h></coordinates><panel_attributes>&lt;&lt;SPIImplamantation&gt;&gt;
+Package::FatClass
+{Some Properties}
+--
+-id: Long
+_-ClassAttribute: Long_
+--
+#Operation(i: int): int
+/+AbstractOperation()/
+--
+Responsibilities
+-- Resp1
+*-- Resp2*</panel_attributes><additional_attributes></additional_attributes></element></diagram>

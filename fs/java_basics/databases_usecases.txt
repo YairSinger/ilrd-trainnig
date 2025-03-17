@@ -1,0 +1,33 @@
+Stack:
+	holding privous web pages in browser.
+	evaluating expressions (calculator, brackets)
+	undo changes
+	
+List:
+	files versions(dynamic, non sequentioal, fast insert and remove)
+
+Dynamic vector:
+
+Heap:
+	max-free-list (o(1) for max free block
+	
+BST:
+	
+
+Trie:
+	Dictionary.
+	holding IP addresess (DHCP) 
+	
+AVL:
+	
+
+Queue:
+
+sorted list:
+
+
+circular buffer:
+
+
+	
+	

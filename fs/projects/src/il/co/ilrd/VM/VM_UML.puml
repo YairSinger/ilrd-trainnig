@@ -1,0 +1,56 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+class VM #ORANGE|PINK{
+    + turnOn(): void
+    + turnOff() : void
+    + selectProduct(String): void
+    + insertCoin(double) : void
+    + void cancel() :void
+}
+
+class UserDisplay {
+
+}
+
+class UserProduct{
+    + UserProduct(String, double): UserProduct
+}
+
+enum VmStates{
+    OFF,
+    WAIT4SELECTION,
+    WAIT4COINS,
+    + turnOn(VM): void
+     + turnOff(VM) : void
+     + selectProduct(VM): void
+     + insertCoin(VM) : void
+     + void cancel(VM) :void
+}
+
+
+interface ProductProtoTypes {
+    + getPrice(): double
+    + getName(): String
+}
+
+interface VMDisplay{
+    +output(String): void
+}
+VM *-- VmStates
+VM -down[hidden]-> VmStates
+VM -left[hidden]-> UserDisplay
+VM -right[hidden]-> UserProduct
+
+UserDisplay -down[hidden]-> VMDisplay
+
+VM *- UserProduct
+VM *- UserDisplay
+UserProduct ..|> ProductProtoTypes
+UserDisplay ..|> VMDisplay
+
+
+
+
+@enduml

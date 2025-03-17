@@ -1,0 +1,11 @@
+[project-build]
+command=make
+save=2
+
+[project-clean]
+command=make clean
+
+[project-run]
+command=./out/debug/task_test
+
+output=terminal
